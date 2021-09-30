@@ -1,0 +1,354 @@
+
+struct sume_metadata_t {
+  dma_q_size : 16,
+  nf3_q_size : 16,
+  nf2_q_size : 16,
+  nf1_q_size : 16,
+  nf0_q_size : 16,
+  send_dig_to_cpu : 8,
+  drop : 8,
+  dst_port : 8,
+  src_port : 8,
+  pkt_len : 16 }
+struct Ethernet_h {
+  isValid : 1,
+  dstAddr : 48,
+  srcAddr : 48,
+  etherType : 16 }
+struct Vlan_h {
+  isValid : 1,
+  prio : 3,
+  dropEligible : 1,
+  vlanId : 12,
+  etherType : 16 }
+struct Parsed_packet {
+  ethernet : Ethernet_h,
+  vlan : Vlan_h }
+struct user_metadata_t {
+  unused : 8 }
+struct digest_data_t {
+  unused : 256 }
+class digest_data_t_0::Tuple(out) {
+  struct {
+    unused : 256 } }
+class sume_metadata_t_0::Tuple(inout) {
+  struct {
+    dma_q_size : 16,
+    nf3_q_size : 16,
+    nf2_q_size : 16,
+    nf1_q_size : 16,
+    nf0_q_size : 16,
+    send_dig_to_cpu : 8,
+    drop : 8,
+    dst_port : 8,
+    src_port : 8,
+    pkt_len : 16 } }
+class TopParser_t::ParsingEngine(16384,3,start) {
+  class hdr_t::Tuple(out) {
+    struct {
+      ethernet : Ethernet_h,
+      vlan : Vlan_h } }
+  class user_metadata_t_0::Tuple(out) {
+    struct {
+      unused : 8 } }
+  class digest_data_t_0::Tuple(out) {
+    struct {
+      unused : 256 } }
+  class sume_metadata_t_0::Tuple(inout) {
+    struct {
+      dma_q_size : 16,
+      nf3_q_size : 16,
+      nf2_q_size : 16,
+      nf1_q_size : 16,
+      nf0_q_size : 16,
+      send_dig_to_cpu : 8,
+      drop : 8,
+      dst_port : 8,
+      src_port : 8,
+      pkt_len : 16 } }
+  class TopParser_extracts_t::Tuple(out) {
+    struct {
+      size : 32 } }
+  hdr_t hdr;
+  user_metadata_t_0 user_metadata;
+  digest_data_t_0 digest_data;
+  sume_metadata_t_0 sume_metadata;
+  TopParser_extracts_t TopParser_extracts;
+  class start::Section(1) {
+    struct {
+      dstAddr_0 : 48,
+      srcAddr_0 : 48,
+      etherType_0 : 16 }
+    map transition_0 {
+      (33024, parse_vlan),
+      reject }
+    method update = {
+      hdr.ethernet.isValid = 1,
+      hdr.ethernet.dstAddr = dstAddr_0,
+      hdr.ethernet.srcAddr = srcAddr_0,
+      hdr.ethernet.etherType = etherType_0,
+      TopParser_extracts.size = (TopParser_extracts.size + 112),
+      user_metadata.unused = 0,
+      digest_data.unused = 0 }
+    method move_to_section = transition_0(etherType_0);
+    method increment_offset = 112; }
+  class parse_vlan::Section(2) {
+    struct {
+      prio_0 : 3,
+      dropEligible_0 : 1,
+      vlanId_0 : 12,
+      etherType_1 : 16 }
+    method update = {
+      hdr.vlan.isValid = 1,
+      hdr.vlan.prio = prio_0,
+      hdr.vlan.dropEligible = dropEligible_0,
+      hdr.vlan.vlanId = vlanId_0,
+      hdr.vlan.etherType = etherType_1,
+      TopParser_extracts.size = (TopParser_extracts.size + 32) }
+    method move_to_section = accept;
+    method increment_offset = 32; }
+  class accept::Section(3) {
+    method move_to_section = done(0);
+    method increment_offset = 0; }
+  class reject::Section(2) {
+    method move_to_section = done(0);
+    method increment_offset = 0; } }
+struct forward_0_cp {
+  port : 8 }
+class TopPipe_lvl_t::TupleEngine(1,setup) {
+  class TopPipe_fl_t::Tuple(out) {
+    struct {
+      tmp_0 : 1 } }
+  class digest_data_t_1::Tuple(inout) {
+    struct {
+      unused : 256 } }
+  class hdr_t_0::Tuple(inout) {
+    struct {
+      ethernet : Ethernet_h,
+      vlan : Vlan_h } }
+  class local_state_t::Tuple(out) {
+    struct {
+      id : 16 } }
+  class sume_metadata_t_1::Tuple(inout) {
+    struct {
+      dma_q_size : 16,
+      nf3_q_size : 16,
+      nf2_q_size : 16,
+      nf1_q_size : 16,
+      nf0_q_size : 16,
+      send_dig_to_cpu : 8,
+      drop : 8,
+      dst_port : 8,
+      src_port : 8,
+      pkt_len : 16 } }
+  class user_metadata_t_1::Tuple(inout) {
+    struct {
+      unused : 8 } }
+  class dmac_req_t::Tuple(out) {
+    struct {
+      lookup_request_key : 48 } }
+  TopPipe_fl_t TopPipe_fl;
+  digest_data_t_1 digest_data;
+  hdr_t_0 hdr;
+  local_state_t local_state;
+  sume_metadata_t_1 sume_metadata;
+  user_metadata_t_1 user_metadata;
+  dmac_req_t dmac_req;
+  class setup::Section(1) {
+    method update = {
+      dmac_req.lookup_request_key = hdr.ethernet.dstAddr }
+    method move_to_section = done(0);
+    method increment_offset = 0; } }
+class dmac_t::LookupEngine(EM,64,48,10,1,0) {
+  class dmac_req_t::Tuple(in) {
+    struct {
+      lookup_request_key : 48 } }
+  class dmac_resp_t::Tuple(out) {
+    struct {
+      hit : 1,
+      action_run : 2,
+      forward_0 : forward_0_cp } }
+  dmac_req_t request;
+  dmac_resp_t response;
+  method send_request = { key = request }
+  method receive_response = { response = value } }
+class TopPipe_lvl_0_t::TupleEngine(7,dmac_sec) {
+  class TopPipe_fl_t::Tuple(in) {
+    struct {
+      tmp_0 : 1 } }
+  class digest_data_t_1::Tuple(inout) {
+    struct {
+      unused : 256 } }
+  class hdr_t_0::Tuple(inout) {
+    struct {
+      ethernet : Ethernet_h,
+      vlan : Vlan_h } }
+  class local_state_t::Tuple(in) {
+    struct {
+      id : 16 } }
+  class sume_metadata_t_1::Tuple(inout) {
+    struct {
+      dma_q_size : 16,
+      nf3_q_size : 16,
+      nf2_q_size : 16,
+      nf1_q_size : 16,
+      nf0_q_size : 16,
+      send_dig_to_cpu : 8,
+      drop : 8,
+      dst_port : 8,
+      src_port : 8,
+      pkt_len : 16 } }
+  class user_metadata_t_1::Tuple(inout) {
+    struct {
+      unused : 8 } }
+  class dmac_resp_t::Tuple(in) {
+    struct {
+      hit : 1,
+      action_run : 2,
+      forward_0 : forward_0_cp } }
+  TopPipe_fl_t TopPipe_fl;
+  digest_data_t_1 digest_data;
+  hdr_t_0 hdr;
+  local_state_t local_state;
+  sume_metadata_t_1 sume_metadata;
+  user_metadata_t_1 user_metadata;
+  dmac_resp_t dmac_resp;
+  class NoAction_0_sec::Section(2) {
+    method move_to_section = condition_sec_0;
+    method increment_offset = 0; }
+  class act_0_sec::Section(4) {
+    method update = {
+      TopPipe_fl.tmp_0 = 0 }
+    method move_to_section = condition_sec;
+    method increment_offset = 0; }
+  class act_sec::Section(4) {
+    method update = {
+      TopPipe_fl.tmp_0 = 1 }
+    method move_to_section = condition_sec;
+    method increment_offset = 0; }
+  class condition_sec::Section(5) {
+    method move_to_section = if (!(TopPipe_fl.tmp_0)) send_to_control_0_sec else sink;
+    method increment_offset = 0; }
+  class condition_sec_0::Section(3) {
+    method move_to_section = if (dmac_resp.hit) act_sec else act_0_sec;
+    method increment_offset = 0; }
+  class dmac_sec::Section(1) {
+    map action_select {
+      (1, forward_0_sec),
+      (2, NoAction_0_sec),
+      NoAction_0_sec }
+    method move_to_section = if ((dmac_resp.hit == 1)) action_select(dmac_resp.action_run) else NoAction_0_sec;
+    method increment_offset = 0; }
+  class forward_0_sec::Section(2) {
+    method update = {
+      sume_metadata.dst_port = dmac_resp.forward_0.port }
+    method move_to_section = condition_sec_0;
+    method increment_offset = 0; }
+  class send_to_control_0_sec::Section(6) {
+    method update = {
+      sume_metadata.dst_port = 128 }
+    method move_to_section = sink;
+    method increment_offset = 0; }
+  class sink::Section(7) {
+    method move_to_section = done(0);
+    method increment_offset = 0; } }
+class TopDeparser_t::EditingEngine(16384,4,extract_headers_sec) {
+  class hdr_t_1::Tuple(in) {
+    struct {
+      ethernet : Ethernet_h,
+      vlan : Vlan_h } }
+  class user_metadata_t_2::Tuple(in) {
+    struct {
+      unused : 8 } }
+  class digest_data_t_2::Tuple(inout) {
+    struct {
+      unused : 256 } }
+  class sume_metadata_t_2::Tuple(inout) {
+    struct {
+      dma_q_size : 16,
+      nf3_q_size : 16,
+      nf2_q_size : 16,
+      nf1_q_size : 16,
+      nf0_q_size : 16,
+      send_dig_to_cpu : 8,
+      drop : 8,
+      dst_port : 8,
+      src_port : 8,
+      pkt_len : 16 } }
+  class TopDeparser_extracts_t::Tuple(in) {
+    struct {
+      size : 32 } }
+  hdr_t_1 hdr;
+  user_metadata_t_2 user_metadata;
+  digest_data_t_2 digest_data;
+  sume_metadata_t_2 sume_metadata;
+  TopDeparser_extracts_t TopDeparser_extracts;
+  class act_1_sec::Section(2) {
+    method move_to_section = emit_1;
+    method increment_offset = 0; }
+  class emit_0::Section(4) {
+    struct {
+      prio : 3,
+      dropEligible : 1,
+      vlanId : 12,
+      etherType : 16 }
+    method insert = if (hdr.vlan.isValid) 32 else 0;
+    method update = {
+      prio = hdr.vlan.prio,
+      dropEligible = hdr.vlan.dropEligible,
+      vlanId = hdr.vlan.vlanId,
+      etherType = hdr.vlan.etherType }
+    method move_to_section = done(0);
+    method increment_offset = 0; }
+  class emit_1::Section(3) {
+    struct {
+      dstAddr : 48,
+      srcAddr : 48,
+      etherType : 16 }
+    method insert = if (hdr.ethernet.isValid) 112 else 0;
+    method update = {
+      dstAddr = hdr.ethernet.dstAddr,
+      srcAddr = hdr.ethernet.srcAddr,
+      etherType = hdr.ethernet.etherType }
+    method move_to_section = emit_0;
+    method increment_offset = 0; }
+  class extract_headers_sec::Section(1) {
+    method remove = TopDeparser_extracts.size;
+    method move_to_section = act_1_sec;
+    method increment_offset = 0; } }
+class Packet_input::Packet(in) {}
+class Packet_output::Packet(out) {}
+class vSwitch0::System {
+  digest_data_t_0 digest_data;
+  sume_metadata_t_0 sume_metadata;
+  TopParser_t TopParser;
+  TopPipe_lvl_t TopPipe_lvl;
+  dmac_t dmac;
+  TopPipe_lvl_0_t TopPipe_lvl_0;
+  TopDeparser_t TopDeparser;
+  Packet_input packet_in;
+  Packet_output packet_out;
+  method connect = {
+    TopPipe_lvl_0.TopPipe_fl = TopPipe_lvl.TopPipe_fl,
+    TopPipe_lvl_0.digest_data = TopPipe_lvl.digest_data,
+    TopPipe_lvl_0.hdr = TopPipe_lvl.hdr,
+    TopPipe_lvl_0.local_state = TopPipe_lvl.local_state,
+    TopPipe_lvl_0.sume_metadata = TopPipe_lvl.sume_metadata,
+    TopPipe_lvl_0.user_metadata = TopPipe_lvl.user_metadata,
+    dmac.request = TopPipe_lvl.dmac_req,
+    TopPipe_lvl_0.dmac_resp = dmac.response,
+    TopPipe_lvl.hdr = TopParser.hdr,
+    TopDeparser.hdr = TopPipe_lvl_0.hdr,
+    TopPipe_lvl.user_metadata = TopParser.user_metadata,
+    TopDeparser.user_metadata = TopPipe_lvl_0.user_metadata,
+    TopPipe_lvl.digest_data = TopParser.digest_data,
+    TopDeparser.digest_data = TopPipe_lvl_0.digest_data,
+    digest_data = TopDeparser.digest_data,
+    TopParser.sume_metadata = sume_metadata,
+    TopPipe_lvl.sume_metadata = TopParser.sume_metadata,
+    TopDeparser.sume_metadata = TopPipe_lvl_0.sume_metadata,
+    sume_metadata = TopDeparser.sume_metadata,
+    TopParser.packet_in = packet_in,
+    TopDeparser.packet_in = TopParser.packet_out,
+    packet_out = TopDeparser.packet_out,
+    TopDeparser.TopDeparser_extracts = TopParser.TopParser_extracts } }

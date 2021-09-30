@@ -1,0 +1,1 @@
+{"EM": {"dmac": {"key_width": "48", "max_depth": "64", "tableID": "0", "value_width": "10", "table_name": "dmac", "aging_width": "0", "clk_period": "6667", "base_address": "0x00"}}, "LPM": {}, "TCAM": {}}

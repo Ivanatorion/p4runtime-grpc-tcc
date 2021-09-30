@@ -1,0 +1,218 @@
+{
+    "hosts": {
+        "00:00:00:00:01:01/-1": {
+            "basic": {
+                "latitude": 28, 
+                "ips": [
+                    "10.0.1.1"
+                ], 
+                "locations": [
+                    "device:bmv2:s1/2"
+                ], 
+                "longitude": -107, 
+                "name": "h1"
+            }
+        }, 
+        "00:00:00:00:02:02/-1": {
+            "basic": {
+                "latitude": 28, 
+                "ips": [
+                    "10.0.2.2"
+                ], 
+                "locations": [
+                    "device:bmv2:s2/2"
+                ], 
+                "longitude": -99, 
+                "name": "h2"
+            }
+        },
+        "00:00:00:00:03:03/-1": {
+            "basic": {
+                "latitude": 28, 
+                "ips": [
+                    "10.0.3.3"
+                ], 
+                "locations": [
+                    "device:bmv2:s3/1"
+                ], 
+                "longitude": -99, 
+                "name": "h3"
+            }
+        },
+        "00:00:00:00:01:11/-1": {
+            "basic": {
+                "latitude": 28, 
+                "ips": [
+                    "10.0.1.11"
+                ], 
+                "locations": [
+                    "device:bmv2:s1/1"
+                ], 
+                "longitude": -99, 
+                "name": "h11"
+            }
+        },
+        "00:00:00:00:02:22/-1": {
+            "basic": {
+                "latitude": 28, 
+                "ips": [
+                    "10.0.2.22"
+                ], 
+                "locations": [
+                    "device:bmv2:s2/1"
+                ], 
+                "longitude": -99, 
+                "name": "h22"
+            }
+        }
+    }, 
+    "devices": {
+        "device:bmv2:s1": {
+            "ports": {
+                "1": {
+                    "name": "s1-eth1", 
+                    "speed": 10000, 
+                    "enabled": true, 
+                    "number": 1, 
+                    "removed": false, 
+                    "type": "copper"
+                }, 
+                "3": {
+                    "name": "s1-eth3", 
+                    "speed": 10000, 
+                    "enabled": true, 
+                    "number": 3, 
+                    "removed": false, 
+                    "type": "copper"
+                }, 
+                "2": {
+                    "name": "s1-eth2", 
+                    "speed": 10000, 
+                    "enabled": true, 
+                    "number": 2, 
+                    "removed": false, 
+                    "type": "copper"
+                },
+                 "4": {
+                    "name": "s1-eth4", 
+                    "speed": 10000, 
+                    "enabled": true, 
+                    "number": 4, 
+                    "removed": false, 
+                    "type": "copper"
+                }
+            }, 
+            "basic": {
+                "latitude": 33, 
+                "managementAddress": "grpcs://127.0.0.1:50051?device_id=1", 
+                "driver": "bmv2", 
+                "longitude": -99, 
+                "pipeconf": "p4-tutorial-pipeconf"
+            }
+        }, 
+        "device:bmv2:s2": {
+            "ports": {
+                "1": {
+                    "name": "s2-eth1", 
+                    "speed": 10000, 
+                    "enabled": true, 
+                    "number": 1, 
+                    "removed": false, 
+                    "type": "copper"
+                }, 
+                "3": {
+                    "name": "s2-eth3", 
+                    "speed": 10000, 
+                    "enabled": true, 
+                    "number": 3, 
+                    "removed": false, 
+                    "type": "copper"
+                }, 
+                "2": {
+                    "name": "s2-eth2", 
+                    "speed": 10000, 
+                    "enabled": true, 
+                    "number": 2, 
+                    "removed": false, 
+                    "type": "copper"
+                },
+                 "4": {
+                    "name": "s2-eth4", 
+                    "speed": 10000, 
+                    "enabled": true, 
+                    "number": 4, 
+                    "removed": false, 
+                    "type": "copper"
+                }
+            },
+            "basic": {
+                "latitude": 41, 
+                "managementAddress": "grpcs://127.0.0.1:50051?device_id=2", 
+                "driver": "bmv2", 
+                "longitude": -99, 
+                "pipeconf": "p4-tutorial-pipeconf"
+            }
+        }, 
+        "device:bmv2:s3": {
+            "ports": {
+                "1": {
+                    "name": "s3-eth1", 
+                    "speed": 10000, 
+                    "enabled": true, 
+                    "number": 1, 
+                    "removed": false, 
+                    "type": "copper"
+                }, 
+                "2": {
+                    "name": "s3-eth2", 
+                    "speed": 10000, 
+                    "enabled": true, 
+                    "number": 2, 
+                    "removed": false, 
+                    "type": "copper"
+                },
+                "3": {
+                    "name": "s3-eth3", 
+                    "speed": 10000, 
+                    "enabled": true, 
+                    "number": 3, 
+                    "removed": false, 
+                    "type": "copper"
+                }
+            }, 
+            "basic": {
+                "latitude": 41, 
+                "managementAddress": "grpcs://127.0.0.1:50051?device_id=3", 
+                "driver": "bmv2", 
+                "longitude": -107, 
+                "pipeconf": "p4-tutorial-pipeconf"
+            }
+        }
+    }, 
+    "links": {
+        "device:bmv2:s1/3-device:bmv2:s2/3": {
+            "basic": {
+                "bandwidth": 50, 
+                "type": "DIRECT"
+            }
+        }, 
+        "device:bmv2:s1/4-device:bmv2:s3/2": {
+            "basic": {
+                "bandwidth": 50, 
+                "type": "DIRECT"
+            }
+        }, 
+        "device:bmv2:s2/3-device:bmv2:s1/3": {
+            "basic": {
+                "bandwidth": 50, 
+                "type": "DIRECT"
+            }
+        },
+        "device:bmv2:s2/4-device:bmv2:s3/3": {
+            "basic": {
+                "bandwidth": 50, 
+                "type": "DIRECT"
+            }
+        }
+    }
+}

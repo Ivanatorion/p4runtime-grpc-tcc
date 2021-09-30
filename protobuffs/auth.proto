@@ -1,0 +1,6 @@
+syntax = "proto3";
+
+message Auth {
+	string user_name = 1;
+	string passwd = 2;
+}

@@ -1,0 +1,291 @@
+{
+  "TopParser" : {
+    "px_io_tuples" : {
+      "1" : {
+        "px_name" : "hdr",
+        "p4_name" : "hdr",
+        "px_type_name" : "hdr_t",
+        "direction" : "out"
+      },
+      "2" : {
+        "px_name" : "user_metadata",
+        "p4_name" : "user_metadata",
+        "px_type_name" : "user_metadata_t_0",
+        "direction" : "out"
+      },
+      "3" : {
+        "px_name" : "digest_data",
+        "p4_name" : "digest_data",
+        "px_type_name" : "digest_data_t_0",
+        "direction" : "out"
+      },
+      "4" : {
+        "px_name" : "sume_metadata",
+        "p4_name" : "sume_metadata",
+        "px_type_name" : "sume_metadata_t_0",
+        "direction" : "inout"
+      }
+    },
+    "px_engines" : [
+      {
+        "px_name" : "TopParser",
+        "px_type_name" : "TopParser_t"
+      }
+    ],
+    "px_system_connections" : []
+  },
+  "TopPipe" : {
+    "px_io_tuples" : {
+      "0" : {
+        "px_name" : "hdr",
+        "p4_name" : "hdr",
+        "px_type_name" : "hdr_t_0",
+        "direction" : "inout"
+      },
+      "1" : {
+        "px_name" : "user_metadata",
+        "p4_name" : "user_metadata",
+        "px_type_name" : "user_metadata_t_1",
+        "direction" : "inout"
+      },
+      "2" : {
+        "px_name" : "digest_data",
+        "p4_name" : "digest_data",
+        "px_type_name" : "digest_data_t_1",
+        "direction" : "inout"
+      },
+      "3" : {
+        "px_name" : "sume_metadata",
+        "p4_name" : "sume_metadata",
+        "px_type_name" : "sume_metadata_t_1",
+        "direction" : "inout"
+      }
+    },
+    "px_engines" : [
+      {
+        "px_name" : "TopPipe_lvl",
+        "px_type_name" : "TopPipe_lvl_t"
+      },
+      {
+        "px_name" : "ipv4_nhop",
+        "px_type_name" : "ipv4_nhop_t"
+      },
+      {
+        "px_name" : "TopPipe_lvl_0",
+        "px_type_name" : "TopPipe_lvl_0_t"
+      },
+      {
+        "px_name" : "forward_table",
+        "px_type_name" : "forward_table_t"
+      },
+      {
+        "px_name" : "TopPipe_lvl_1",
+        "px_type_name" : "TopPipe_lvl_1_t"
+      },
+      {
+        "px_name" : "send_frame",
+        "px_type_name" : "send_frame_t"
+      },
+      {
+        "px_name" : "TopPipe_lvl_2",
+        "px_type_name" : "TopPipe_lvl_2_t"
+      }
+    ],
+    "px_system_connections" : ["TopPipe_lvl_0.digest_data = TopPipe_lvl.digest_data", "TopPipe_lvl_0.hdr = TopPipe_lvl.hdr", "TopPipe_lvl_0.local_state = TopPipe_lvl.local_state", "TopPipe_lvl_0.sume_metadata = TopPipe_lvl.sume_metadata", "TopPipe_lvl_0.user_metadata = TopPipe_lvl.user_metadata", "ipv4_nhop.request = TopPipe_lvl.ipv4_nhop_req", "TopPipe_lvl_0.ipv4_nhop_resp = ipv4_nhop.response", "TopPipe_lvl_1.digest_data = TopPipe_lvl_0.digest_data", "TopPipe_lvl_1.hdr = TopPipe_lvl_0.hdr", "TopPipe_lvl_1.ipv4_nhop_resp = TopPipe_lvl_0.ipv4_nhop_resp", "TopPipe_lvl_1.local_state = TopPipe_lvl_0.local_state", "TopPipe_lvl_1.sume_metadata = TopPipe_lvl_0.sume_metadata", "TopPipe_lvl_1.user_metadata = TopPipe_lvl_0.user_metadata", "forward_table.request = TopPipe_lvl_0.forward_table_req", "TopPipe_lvl_1.forward_table_resp = forward_table.response", "TopPipe_lvl_2.digest_data = TopPipe_lvl_1.digest_data", "TopPipe_lvl_2.forward_table_resp = TopPipe_lvl_1.forward_table_resp", "TopPipe_lvl_2.hdr = TopPipe_lvl_1.hdr", "TopPipe_lvl_2.ipv4_nhop_resp = TopPipe_lvl_1.ipv4_nhop_resp", "TopPipe_lvl_2.local_state = TopPipe_lvl_1.local_state", "TopPipe_lvl_2.sume_metadata = TopPipe_lvl_1.sume_metadata", "TopPipe_lvl_2.user_metadata = TopPipe_lvl_1.user_metadata", "send_frame.request = TopPipe_lvl_1.send_frame_req", "TopPipe_lvl_2.send_frame_resp = send_frame.response"],
+    "px_lookups" : [
+      {
+        "px_name" : "send_frame",
+        "p4_name" : "send_frame",
+        "px_class" : "LookupEngine",
+        "px_type_name" : "send_frame_t",
+        "match_type" : "EM",
+        "action_ids" : {
+          "TopPipe.set_smac" : 1,
+          "TopPipe.drop" : 2,
+          ".NoAction" : 3
+        },
+        "response_fields" : [
+          {
+            "px_name" : "hit",
+            "type" : "bits",
+            "size" : 1
+          },
+          {
+            "px_name" : "action_run",
+            "type" : "bits",
+            "size" : 2
+          },
+          {
+            "px_name" : "set_smac_0",
+            "type" : "struct",
+            "fields" : [
+              {
+                "px_name" : "smac",
+                "type" : "bits",
+                "size" : 48
+              }
+            ],
+            "p4_action" : "TopPipe.set_smac"
+          }
+        ],
+        "request_fields" : [
+          {
+            "px_name" : "lookup_request_padding",
+            "type" : "bits",
+            "size" : 4
+          },
+          {
+            "px_name" : "lookup_request_key",
+            "p4_name" : "sume_metadata.dst_port",
+            "type" : "bits",
+            "size" : 8
+          }
+        ],
+        "annotations" : {
+          "name" : ["TopPipe.send_frame"],
+          "Xilinx_ExternallyConnected" : ["0"],
+          "Xilinx_LookupEngineType" : ["EM"]
+        }
+      },
+      {
+        "px_name" : "ipv4_nhop",
+        "p4_name" : "ipv4_nhop",
+        "px_class" : "LookupEngine",
+        "px_type_name" : "ipv4_nhop_t",
+        "match_type" : "EM",
+        "action_ids" : {
+          "TopPipe.set_nhop" : 1,
+          "TopPipe.drop" : 2,
+          ".NoAction" : 3
+        },
+        "response_fields" : [
+          {
+            "px_name" : "hit",
+            "type" : "bits",
+            "size" : 1
+          },
+          {
+            "px_name" : "action_run",
+            "type" : "bits",
+            "size" : 2
+          },
+          {
+            "px_name" : "set_nhop_0",
+            "type" : "struct",
+            "fields" : [
+              {
+                "px_name" : "nhop_ipv4",
+                "type" : "bits",
+                "size" : 32
+              }
+            ],
+            "p4_action" : "TopPipe.set_nhop"
+          }
+        ],
+        "request_fields" : [
+          {
+            "px_name" : "lookup_request_key_1",
+            "p4_name" : "hdr.ipv4.dstAddr",
+            "type" : "bits",
+            "size" : 32
+          }
+        ],
+        "annotations" : {
+          "name" : ["TopPipe.ipv4_nhop"],
+          "Xilinx_ExternallyConnected" : ["0"],
+          "Xilinx_LookupEngineType" : ["EM"]
+        }
+      },
+      {
+        "px_name" : "forward_table",
+        "p4_name" : "forward_table",
+        "px_class" : "LookupEngine",
+        "px_type_name" : "forward_table_t",
+        "match_type" : "EM",
+        "action_ids" : {
+          "TopPipe.set_dmac" : 1,
+          "TopPipe.drop" : 2,
+          ".NoAction" : 3
+        },
+        "response_fields" : [
+          {
+            "px_name" : "hit",
+            "type" : "bits",
+            "size" : 1
+          },
+          {
+            "px_name" : "action_run",
+            "type" : "bits",
+            "size" : 2
+          },
+          {
+            "px_name" : "set_dmac_0",
+            "type" : "struct",
+            "fields" : [
+              {
+                "px_name" : "dmac",
+                "type" : "bits",
+                "size" : 48
+              },
+              {
+                "px_name" : "port",
+                "type" : "bits",
+                "size" : 8
+              }
+            ],
+            "p4_action" : "TopPipe.set_dmac"
+          }
+        ],
+        "request_fields" : [
+          {
+            "px_name" : "lookup_request_key_0",
+            "p4_name" : "user_metadata.routing_metadata.nhop_ipv4",
+            "type" : "bits",
+            "size" : 32
+          }
+        ],
+        "annotations" : {
+          "name" : ["TopPipe.forward_table"],
+          "Xilinx_ExternallyConnected" : ["0"],
+          "Xilinx_LookupEngineType" : ["EM"]
+        }
+      }
+    ],
+    "px_user_engines" : []
+  },
+  "TopDeparser" : {
+    "px_io_tuples" : {
+      "1" : {
+        "px_name" : "hdr",
+        "p4_name" : "hdr",
+        "px_type_name" : "hdr_t_1",
+        "direction" : "in"
+      },
+      "2" : {
+        "px_name" : "user_metadata",
+        "p4_name" : "user_metadata",
+        "px_type_name" : "user_metadata_t_2",
+        "direction" : "in"
+      },
+      "3" : {
+        "px_name" : "digest_data",
+        "p4_name" : "digest_data",
+        "px_type_name" : "digest_data_t_2",
+        "direction" : "inout"
+      },
+      "4" : {
+        "px_name" : "sume_metadata",
+        "p4_name" : "sume_metadata",
+        "px_type_name" : "sume_metadata_t_2",
+        "direction" : "inout"
+      }
+    },
+    "px_engines" : [
+      {
+        "px_name" : "TopDeparser",
+        "px_type_name" : "TopDeparser_t"
+      }
+    ],
+    "px_system_connections" : []
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "target": "bmv2",
+  "p4info": "build/l2.p4.p4info.txt",
+  "bmv2_json": "build/l2.json",
+  "table_entries": [
+    {
+      "table": "MyIngress.dmac",
+      "match": {
+        "hdr.ethernet.dstAddr": "08:00:00:00:01:01"
+      },
+      "action_name": "MyIngress.set_out_port",
+      "action_params": {
+        "port": 1
+      }
+    },
+    {
+      "table": "MyIngress.checkCPU",
+      "match": {
+        "hdr.ethernet.dstAddr": "08:00:00:00:02:02"
+      },
+      "action_name": "MyIngress.send_to_cpu",
+      "action_params": {
+        "s_id": 1
+      }
+    }
+  ]
+}

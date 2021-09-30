@@ -1,0 +1,12 @@
+-----------------------------------------------
+|  Permission    |  Usage                     |
+-----------------------------------------------
+| DEVICE_EVENT   | packet_in                  |
+| PACKET_EVENT   | packet_in                  |
+| DEVICE_READ    | table_read, counter_read   |
+| DEVICE_WRITE   | table_write, counter_write |
+| FLOWRULE_READ  | table_read                 |
+| FLOWRULE_WRITE | table_write                |
+| RESOURCE_READ  | counter_read               |
+| RESOURCE_WRITE | counter_write              |
+-----------------------------------------------

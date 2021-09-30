@@ -1,0 +1,166 @@
+{
+  "TopParser" : {
+    "px_io_tuples" : {
+      "1" : {
+        "px_name" : "hdr",
+        "p4_name" : "hdr",
+        "px_type_name" : "hdr_t",
+        "direction" : "out"
+      },
+      "2" : {
+        "px_name" : "user_metadata",
+        "p4_name" : "user_metadata",
+        "px_type_name" : "user_metadata_t_0",
+        "direction" : "out"
+      },
+      "3" : {
+        "px_name" : "digest_data",
+        "p4_name" : "digest_data",
+        "px_type_name" : "digest_data_t_0",
+        "direction" : "out"
+      },
+      "4" : {
+        "px_name" : "sume_metadata",
+        "p4_name" : "sume_metadata",
+        "px_type_name" : "sume_metadata_t_0",
+        "direction" : "inout"
+      }
+    },
+    "px_engines" : [
+      {
+        "px_name" : "TopParser",
+        "px_type_name" : "TopParser_t"
+      }
+    ],
+    "px_system_connections" : []
+  },
+  "TopPipe" : {
+    "px_io_tuples" : {
+      "0" : {
+        "px_name" : "hdr",
+        "p4_name" : "hdr",
+        "px_type_name" : "hdr_t_0",
+        "direction" : "inout"
+      },
+      "1" : {
+        "px_name" : "user_metadata",
+        "p4_name" : "user_metadata",
+        "px_type_name" : "user_metadata_t_1",
+        "direction" : "inout"
+      },
+      "2" : {
+        "px_name" : "digest_data",
+        "p4_name" : "digest_data",
+        "px_type_name" : "digest_data_t_1",
+        "direction" : "inout"
+      },
+      "3" : {
+        "px_name" : "sume_metadata",
+        "p4_name" : "sume_metadata",
+        "px_type_name" : "sume_metadata_t_1",
+        "direction" : "inout"
+      }
+    },
+    "px_engines" : [
+      {
+        "px_name" : "TopPipe_lvl",
+        "px_type_name" : "TopPipe_lvl_t"
+      },
+      {
+        "px_name" : "dmac",
+        "px_type_name" : "dmac_t"
+      },
+      {
+        "px_name" : "TopPipe_lvl_0",
+        "px_type_name" : "TopPipe_lvl_0_t"
+      }
+    ],
+    "px_system_connections" : ["TopPipe_lvl_0.digest_data = TopPipe_lvl.digest_data", "TopPipe_lvl_0.hdr = TopPipe_lvl.hdr", "TopPipe_lvl_0.local_state = TopPipe_lvl.local_state", "TopPipe_lvl_0.sume_metadata = TopPipe_lvl.sume_metadata", "TopPipe_lvl_0.user_metadata = TopPipe_lvl.user_metadata", "dmac.request = TopPipe_lvl.dmac_req", "TopPipe_lvl_0.dmac_resp = dmac.response"],
+    "px_lookups" : [
+      {
+        "px_name" : "dmac",
+        "p4_name" : "dmac",
+        "px_class" : "LookupEngine",
+        "px_type_name" : "dmac_t",
+        "match_type" : "EM",
+        "action_ids" : {
+          "TopPipe.forward" : 1,
+          ".NoAction" : 2
+        },
+        "response_fields" : [
+          {
+            "px_name" : "hit",
+            "type" : "bits",
+            "size" : 1
+          },
+          {
+            "px_name" : "action_run",
+            "type" : "bits",
+            "size" : 2
+          },
+          {
+            "px_name" : "forward_0",
+            "type" : "struct",
+            "fields" : [
+              {
+                "px_name" : "port",
+                "type" : "bits",
+                "size" : 8
+              }
+            ],
+            "p4_action" : "TopPipe.forward"
+          }
+        ],
+        "request_fields" : [
+          {
+            "px_name" : "lookup_request_key",
+            "p4_name" : "hdr.ethernet.dstAddr",
+            "type" : "bits",
+            "size" : 48
+          }
+        ],
+        "annotations" : {
+          "name" : ["TopPipe.dmac"],
+          "Xilinx_ExternallyConnected" : ["0"],
+          "Xilinx_LookupEngineType" : ["EM"]
+        }
+      }
+    ],
+    "px_user_engines" : []
+  },
+  "TopDeparser" : {
+    "px_io_tuples" : {
+      "1" : {
+        "px_name" : "hdr",
+        "p4_name" : "hdr",
+        "px_type_name" : "hdr_t_1",
+        "direction" : "in"
+      },
+      "2" : {
+        "px_name" : "user_metadata",
+        "p4_name" : "user_metadata",
+        "px_type_name" : "user_metadata_t_2",
+        "direction" : "in"
+      },
+      "3" : {
+        "px_name" : "digest_data",
+        "p4_name" : "digest_data",
+        "px_type_name" : "digest_data_t_2",
+        "direction" : "inout"
+      },
+      "4" : {
+        "px_name" : "sume_metadata",
+        "p4_name" : "sume_metadata",
+        "px_type_name" : "sume_metadata_t_2",
+        "direction" : "inout"
+      }
+    },
+    "px_engines" : [
+      {
+        "px_name" : "TopDeparser",
+        "px_type_name" : "TopDeparser_t"
+      }
+    ],
+    "px_system_connections" : []
+  }
+}
